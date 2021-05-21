@@ -1,62 +1,33 @@
 <template>
-    <div class="side-bar" style="width:25%">
-        <table>
+    <table>
         <tr>
-            <th></th>
-            <th><h2>HUNT NV</h2></th>
-        </tr>
-        </table>
-        <table>
-        <tr>
-            <th></th>
-            <th>SPECIES</th>
+            <h1 class="title">HUNT NV</h1>
         </tr>
         <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">MULE DEER</td>
+            <label for="species" class="species_label">SPECIES</label>
+            <select name="species" id="species_list">
+                <option value="none">NONE</option>
+                <option value="antelope">ANTELOPE</option>
+                <option value="bighornSheep">BIGHORN SHEEP</option>
+                <option value="elk">ELK</option>
+                <option value="moutainGoat">MOUNTAIN GOAT</option>
+            </select>
         </tr>
         <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">BIGHORN SHEEP</td>
+            <label for="weapon" class="weapon_label">WEAPON CLASS</label>
+            <select name="weapon" id="weapon_list">
+                <option value="none">NONE</option>
+                <option value="archery">ARCHERY</option>
+                <option value="rifle">RIFLE</option>
+                <option value="muzzle-loader">MUZZLE LOADER</option>
+                <option value="any">ANY</option>
+            </select>
         </tr>
         <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">MOUNTAIN LION</td>
+            <label for="weapon" class="weapon_label">QUOTA</label>
+            <input type="range">
         </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">ELK</td>
-        </tr>
-        </table>
-        <table>
-        <tr>
-            <th></th>
-            <th>WEAPON CLASS</th>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">ARCHERY</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">RIFLE</td>
-        </tr>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td id="label">MUZZLE LOADER</td>
-        </tr>
-        </table>
-        <table>
-        <tr>
-            <th></th>
-            <th>QUOTA</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="range"></td>
-        </tr>
-        </table>
-    </div>
+    </table>
 </template>
 
 <script>
@@ -64,25 +35,30 @@
 </script>
 
 <style scoped>
-h1, h3, li, td, th {
+h1, label {
     color: white;
-}
-
-th {
-    font-size: 25px;
-}
-
-ul {
-    list-style-type: none;
-}
-
-table {
-    width: 100%;
 }
 
 .side-bar {
     background-color: black;
     height: 100%;
-    opacity: 80%;
+}
+
+table {
+    display: inline;
+}
+
+tr {
+    display: grid;
+    padding: 20px;
+}
+
+select {
+    padding: 5%;
+    border-radius: 3px;
+}
+
+label {
+    padding-bottom: 5%;
 }
 </style>

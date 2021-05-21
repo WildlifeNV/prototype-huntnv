@@ -1,18 +1,19 @@
 <template>
     <l-map 
-        style="height: 100%; width: 100%"
-        v-model:zoom="zoom" 
-        :center="[38.8026, -116.4194]">
+      style="height: 100%; width: 100%"
+      v-model:zoom="zoom" 
+      :center="[38.8026, -116.4194]">
     <l-tile-layer
-        v-for="tileProvider in tileProviders"
-        :key="tileProvider.name"
-        :name="tileProvider.name"
-        :visible="tileProvider.visible"
-        :url="tileProvider.url"
-        :attribution="tileProvider.attribution"
-        layer-type="base"
+      v-for="tileProvider in tileProviders"
+      :key="tileProvider.name"
+      :name="tileProvider.name"
+      :visible="tileProvider.visible"
+      :url="tileProvider.url"
+      :attribution="tileProvider.attribution"
+      layer-type="base"
     />
-    <l-geo-json :geojson="geojson" :options="geojsonOptions" />
+    <l-geo-json :geojson="geojson">
+    </l-geo-json>
   </l-map>
 </template>
 
@@ -20,7 +21,7 @@
 // DON'T load Leaflet components here!
 // Its CSS is needed though, if not imported elsewhere in your application.
 import "leaflet/dist/leaflet.css"
-import { LMap, LGeoJson, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import { LMap, LGeoJson, LTileLayer, LPopup } from "@vue-leaflet/vue-leaflet";
 
 const tileProviders = [
   {
@@ -41,20 +42,16 @@ export default {
   data() {
     return {
         zoom: 7,
-        geojson: {
-            type: "FeatureCollection",
-            features: [
-            // ...
-            ],
-        },
-        geojsonOptions: {
-            // Options that don't rely on Leaflet methods.
-        },
+        geojson: null,
         tileProviders: tileProviders,
     };
   },
   async beforeMount() {
     // HERE is where to load Leaflet components!
+    const baseURL = "public/Game_Management_Units.geojson"
+    const response = await fetch( baseURL );
+    this.geojson = await response.json();
+
     const { circleMarker } = await import("leaflet/dist/leaflet-src.esm");
 
     // And now the Leaflet circleMarker function can be used by the options:
@@ -62,5 +59,6 @@ export default {
       circleMarker(latLng, { radius: 8 });
     this.mapIsReady = true;
   },
+
 };
 </script>

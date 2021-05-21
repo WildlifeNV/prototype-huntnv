@@ -2,7 +2,7 @@
     <l-map 
       style="height: 100%; width: 100%"
       v-model:zoom="zoom" 
-      :center="[38.8026, -116.4194]">
+      :center="[38.6, -116.4194]">
     <l-tile-layer
       v-for="tileProvider in tileProviders"
       :key="tileProvider.name"
@@ -12,8 +12,22 @@
       :attribution="tileProvider.attribution"
       layer-type="base"
     />
-    <l-geo-json :geojson="geojson">
-    </l-geo-json>
+    <l-control 
+      :position="'bottomright'" 
+      class="custom-control"
+      @click="showButton">
+      <p>LAYERS</p>
+    </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      class="custom-control" 
+      v-if="isButtonVisible">
+      <p>DETAILS</p>
+    </l-control>
+    <l-geo-json 
+      :geojson="geojson" 
+      :options="options"
+    />
   </l-map>
 </template>
 
@@ -21,7 +35,7 @@
 // DON'T load Leaflet components here!
 // Its CSS is needed though, if not imported elsewhere in your application.
 import "leaflet/dist/leaflet.css"
-import { LMap, LGeoJson, LTileLayer, LPopup } from "@vue-leaflet/vue-leaflet";
+import { LMap, LGeoJson, LTileLayer, LControl} from "@vue-leaflet/vue-leaflet";
 
 const tileProviders = [
   {
@@ -37,28 +51,57 @@ export default {
   components: {
     LMap,
     LGeoJson,
-    LTileLayer
+    LTileLayer,
+    LControl
   },
   data() {
     return {
         zoom: 7,
         geojson: null,
         tileProviders: tileProviders,
+        isButtonVisible: false,
     };
   },
   async beforeMount() {
     // HERE is where to load Leaflet components!
-    const baseURL = "public/Game_Management_Units.geojson"
+    const baseURL = "/Game_Management_Units.geojson"
     const response = await fetch( baseURL );
     this.geojson = await response.json();
-
-    const { circleMarker } = await import("leaflet/dist/leaflet-src.esm");
-
-    // And now the Leaflet circleMarker function can be used by the options:
-    this.geojsonOptions.pointToLayer = (feature, latLng) =>
-      circleMarker(latLng, { radius: 8 });
-    this.mapIsReady = true;
   },
-
+  methods: {
+    showButton() {
+      if (this.isButtonVisible == false) {
+        this.isButtonVisible = true
+      } else {
+        this.isButtonVisible = false
+      }
+    }
+  },
+  computed: {
+    onEachFeature() {
+      return (features, layer) => {
+        layer.bindTooltip(features.properties.HUNTUNIT, {
+          permanent: false,
+          sticky: true
+        })
+      }
+    },
+    options() {
+      return {
+        onEachFeature: this.onEachFeature
+      }
+    }
+  }
 };
 </script>
+
+<style scoped>
+
+.custom-control {
+  color: #fff;
+  background: rgb(15, 14, 14);
+  padding: 0 0.5em;
+  border: 1px solid rgb(15, 14, 14);
+}
+
+</style>

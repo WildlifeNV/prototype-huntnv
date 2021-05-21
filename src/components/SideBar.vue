@@ -24,15 +24,11 @@
             </select>
         </tr>
         <tr>
-            <label for="weapon" class="weapon_label">QUOTA</label>
+            <label for="success" class="success_label">HUNT SUCCESS</label>
             <input type="range">
         </tr>
     </table>
 </template>
-
-<script>
-
-</script>
 
 <style scoped>
 h1, label {

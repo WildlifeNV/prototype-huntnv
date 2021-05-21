@@ -1,5 +1,5 @@
 <template>
-    <Map class="map" id="map" style="height: 100%; width: 85%"/>
+    <Map class="map" id="map" style="height: 100%"/>
     <SideBar class="side-bar" style="width:15%" />
 </template>
 

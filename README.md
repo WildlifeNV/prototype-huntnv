@@ -11,5 +11,5 @@ Clone github repo
 
 'npm run dev'
 
-<img width="1440" alt="Screen Shot 2021-05-20 at 10 24 26 PM" src="https://user-images.githubusercontent.com/12036982/119086429-55d4d800-b9ba-11eb-9656-012603f2a9ff.png">
+![Screenshot (36)](https://user-images.githubusercontent.com/12036982/119204802-50739e00-ba4b-11eb-87cd-f3cc174fdd3d.png)
 

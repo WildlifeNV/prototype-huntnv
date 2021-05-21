@@ -1,5 +1,6 @@
 <template>
-    <l-map style="height:100vh"
+    <l-map 
+        style="height: 100%; width: 100%"
         v-model:zoom="zoom" 
         :center="[38.8026, -116.4194]">
     <l-tile-layer

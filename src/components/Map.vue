@@ -23,8 +23,8 @@
       v-if="isButtonVisible">
       <div class="select">
         <label class="select-label">SELECT A SPECIES</label>
-        <select id="" >
-          <option>None</option>
+        <select id="species" @change='filterSpecies()' >
+          <option value="none">None</option>
           <option value="bear" >AMERICAN BLACK BEAR</option>
           <option value="antelope" >ANTELOPE</option>
           <option value="sheep" >BIGHORN SHEEP</option>
@@ -40,7 +40,7 @@
       <div class="select">
         <label class="select-label">SELECT A MANAGEMENT UNIT</label>
         <select id="manageunit_id" @change='filterSelect()'>
-          <option value="none">None</option>
+          <option value="none">ALL MANAGEMENT AREAS</option>
           <option value="1" >MANAGEMENT AREA 1</option>
           <option value="2" >MANAGEMENT AREA 2</option>
           <option value="3" >MANAGEMENT AREA 3</option>
@@ -128,7 +128,7 @@ export default {
   },
   async beforeMount() {
     // HERE is where to load Leaflet components!
-    const baseURL = "/hunt-units.geojson"
+    const baseURL = "/hunt_unit_antelope.geojson"
     await axios.get(baseURL)
       .then((response) => {
         this.geojson = response.data.features
@@ -142,6 +142,34 @@ export default {
       } else {
         this.isButtonVisible = false
       }
+    },
+    filterSpecies() {
+      const species = document.getElementById("species").value;
+
+      var species_id
+
+      switch (species) {
+        case 'none':
+          species_id = 0
+          break;
+        case 'antelope':
+          species_id = 1
+          break;
+      
+        default:
+          break;
+      }
+      const baseURL = "/hunt_unit_antelope.geojson"
+      axios.get(baseURL)
+        .then((response) => {
+          const species = species_id
+          if (species === 1) {
+            const data = response.data.features.filter(features => features.properties.ANTELOPE === species_id)
+            console.log(response.data.features.filter(features => features.properties.ANTELOPE === species_id))
+            this.geojson = data
+          }
+        }
+      )
     },
     filterSelect() {
       const choice = document.getElementById("manageunit_id").value;
@@ -244,13 +272,13 @@ export default {
               id = none
       }
 
-      const baseURL = "/hunt-units.geojson"
+      const baseURL = "/hunt_unit_antelope.geojson"
       axios.get(baseURL)
         .then((response) => {
           // allows filtering of geojson
           console.log(id)
           if (id === 0) {
-            const baseURL = "/hunt-units.geojson"
+            const baseURL = "/hunt_unit_antelope.geojson"
             axios.get(baseURL)
               .then((response) => {
                 this.geojson = response.data.features
@@ -266,7 +294,7 @@ export default {
       )
     },
     filterDefualt() {
-      const baseURL = "/hunt-units.geojson"
+      const baseURL = "/hunt_unit_antelope.geojson"
       axios.get(baseURL)
         .then((response) => {
           this.geojson = response.data.features
@@ -274,7 +302,7 @@ export default {
       )
     },
     filterClosed() {
-      const baseURL = "/hunt-units.geojson"
+      const baseURL = "/hunt_unit_antelope.geojson"
       axios.get(baseURL)
         .then((response) => {
           const managementunit = 0

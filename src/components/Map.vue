@@ -22,8 +22,25 @@
       :position="'bottomright'" 
       v-if="isButtonVisible">
       <div class="select">
+        <label class="select-label">SELECT A SPECIES</label>
+        <select id="manageunit_id" @change='filterSpecies()'>
+          <option>None</option>
+          <option value="bear" >AMERICAN BLACK BEAR</option>
+          <option value="antelope" >ANTELOPE</option>
+          <option value="sheep" >BIGHORN SHEEP</option>
+          <option value="elk" >ELK</option>
+          <option value="goat" >MOUNTAIN GOAT</option>
+          <option value="lion" >MOUNTAIN LION</option>
+        </select>
+      </div>
+    </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      v-if="isButtonVisible">
+      <div class="select">
         <label class="select-label">SELECT A MANAGEMENT UNIT</label>
         <select id="manageunit_id" @change='filterSelect()'>
+          <option>None</option>
           <option value="1" >MANAGEMENT AREA 1</option>
           <option value="2" >MANAGEMENT AREA 2</option>
           <option value="3" >MANAGEMENT AREA 3</option>
@@ -61,7 +78,7 @@
       class="custom-control" 
       v-if="isButtonVisible"
       @click="filterClosed">
-      <p>CLOSE HUNTING AREAS</p>
+      <p>CLOSED HUNTING AREAS</p>
     </l-control>
     <l-control 
       :position="'bottomright'" 

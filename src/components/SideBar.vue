@@ -4,6 +4,13 @@
             <h1 class="title">HUNT NV</h1>
         </tr>
         <tr>
+            <label for="species" class="species_label">MANAGEMENT UNIT</label>
+            <select id="league" onchange="LeagueSelect()">
+              <option value="10" >10</option>
+              <option value="12" >12</option>
+            </select>
+        </tr>
+        <tr>
             <label for="species" class="species_label">SPECIES</label>
             <select name="species" id="species_list">
                 <option value="none">NONE</option>

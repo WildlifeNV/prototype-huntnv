@@ -16,13 +16,28 @@
       :position="'bottomright'" 
       class="custom-control"
       @click="showButton">
-      <p>LAYERS</p>
+      <h3>MANAGEMENT AREAS</h3>
     </l-control>
     <l-control 
       :position="'bottomright'" 
       class="custom-control" 
-      v-if="isButtonVisible">
-      <p>DETAILS</p>
+      v-if="isButtonVisible"
+      @click="filterArea10">
+      <p>MANAGEMENT AREA 10</p>
+    </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      class="custom-control" 
+      v-if="isButtonVisible"
+      @click="filterArea12">
+      <p>MANAGEMENT AREA 20</p>
+    </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      class="custom-control" 
+      v-if="isButtonVisible"
+      @click="filterDefualt">
+      <p>ALL UNITS</p>
     </l-control>
     <l-geo-json 
       :geojson="geojson" 
@@ -36,6 +51,7 @@
 // Its CSS is needed though, if not imported elsewhere in your application.
 import "leaflet/dist/leaflet.css"
 import { LMap, LGeoJson, LTileLayer, LControl} from "@vue-leaflet/vue-leaflet";
+import axios from "axios"
 
 const tileProviders = [
   {
@@ -65,8 +81,11 @@ export default {
   async beforeMount() {
     // HERE is where to load Leaflet components!
     const baseURL = "/hunt-units.geojson"
-    const response = await fetch( baseURL );
-    this.geojson = await response.json();
+    await axios.get(baseURL)
+      .then((response) => {
+        this.geojson = response.data.features
+      }
+    )
   },
   methods: {
     showButton() {
@@ -75,6 +94,38 @@ export default {
       } else {
         this.isButtonVisible = false
       }
+    },
+    filterArea10() {
+      const baseURL = "/hunt-units.geojson"
+      axios.get(baseURL)
+        .then((response) => {
+          // allows filtering of geojson
+          const managementunit = 10
+          const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
+          console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
+          this.geojson = data
+        }
+      )
+    },
+    filterArea12() {
+      const baseURL = "/hunt-units.geojson"
+      axios.get(baseURL)
+        .then((response) => {
+          // allows filtering of geojson
+          const managementunit = 20
+          const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
+          console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
+          this.geojson = data
+        }
+      )
+    },
+    filterDefualt() {
+      const baseURL = "/hunt-units.geojson"
+      axios.get(baseURL)
+        .then((response) => {
+          this.geojson = response.data.features
+        }
+      )
     }
   },
   computed: {

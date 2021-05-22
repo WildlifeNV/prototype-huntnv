@@ -80,22 +80,10 @@ export default {
 
   },
   computed: {
-    tooltipContent(tooltipContent) {
-      if (features.properties.HUNTUNIT == null) {
-          tooltipContent = closedAreaContent
-        } else {
-          tooltipContent = huntUnitContent
-        }
-    }, 
-
-
     onEachFeature() {
       return (features, layer) => {
         const huntUnitContent = "<p><b> HUNT UNIT: </b>"  + features.properties.HUNTUNIT + 
-                "</br>" + "<p><b> MANAGEMENT UNIT: </b>" + features.properties.MANAGEUNIT;
-
-        const closedUnitContent = "<p><b> STATUS: </b>" + features.properties.SYMBOL + 
-                "</br>" + "<p><b> NAME: </b>" + features.properties.CLOSED;
+                "</br>" + "<p><b> MANAGEMENT AREA: </b>" + features.properties.MANAGEUNIT;
 
         layer.bindTooltip(huntUnitContent, {
           permanent: false,

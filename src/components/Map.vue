@@ -23,7 +23,7 @@
       v-if="isButtonVisible">
       <div class="select">
         <label class="select-label">SELECT A SPECIES</label>
-        <select id="manageunit_id" @change='filterSpecies()'>
+        <select id="" >
           <option>None</option>
           <option value="bear" >AMERICAN BLACK BEAR</option>
           <option value="antelope" >ANTELOPE</option>
@@ -40,7 +40,7 @@
       <div class="select">
         <label class="select-label">SELECT A MANAGEMENT UNIT</label>
         <select id="manageunit_id" @change='filterSelect()'>
-          <option>None</option>
+          <option value="none">None</option>
           <option value="1" >MANAGEMENT AREA 1</option>
           <option value="2" >MANAGEMENT AREA 2</option>
           <option value="3" >MANAGEMENT AREA 3</option>
@@ -150,6 +150,9 @@ export default {
       var id;
 
       switch(choice) {
+          case 'none':
+              id = 0
+              break;
           case '1':
               id = 1
               break;
@@ -238,17 +241,27 @@ export default {
               id = 29
               break;
           default:
-              id = 1
+              id = none
       }
 
       const baseURL = "/hunt-units.geojson"
       axios.get(baseURL)
         .then((response) => {
           // allows filtering of geojson
-          const managementunit = id
-          const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
-          console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
-          this.geojson = data
+          console.log(id)
+          if (id === 0) {
+            const baseURL = "/hunt-units.geojson"
+            axios.get(baseURL)
+              .then((response) => {
+                this.geojson = response.data.features
+              }
+            )
+          } else {
+            const managementunit = id
+            const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
+            console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
+            this.geojson = data
+          }
         }
       )
     },

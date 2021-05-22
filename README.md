@@ -9,6 +9,8 @@ Clone github repo
 
 'npm run dev'
 
-![Uploading Screen Shot 2021-05-22 at 10.38.24 AM.png…]()
+<img width="1440" alt="shot" src="https://user-images.githubusercontent.com/12036982/119236050-2624ed80-baea-11eb-9427-a4a656683c08.png">
+
+
 
 

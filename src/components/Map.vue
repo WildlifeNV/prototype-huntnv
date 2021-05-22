@@ -13,13 +13,13 @@
       layer-type="base"
     />
     <l-control 
-      :position="'bottomleft'" 
-      class="custom-control"
+      :position="'bottomright'" 
+      class="custom-control-main"
       @click="showButton">
-      <h3>MANAGEMENT AREAS</h3>
+      <h1>HUNT NV</h1>
     </l-control>
     <l-control 
-      :position="'bottomleft'" 
+      :position="'bottomright'" 
       v-if="isButtonVisible">
       <div class="select">
         <label class="select-label">SELECT A MANAGEMENT UNIT</label>
@@ -57,20 +57,19 @@
       </div>
     </l-control>
     <l-control 
-      :position="'bottomleft'" 
+      :position="'bottomright'" 
       class="custom-control" 
       v-if="isButtonVisible"
       @click="filterClosed">
       <p>CLOSE HUNTING AREAS</p>
     </l-control>
     <l-control 
-      :position="'bottomleft'" 
+      :position="'bottomright'" 
       class="custom-control" 
       v-if="isButtonVisible"
       @click="filterDefualt">
       <p>ALL UNITS</p>
     </l-control>
-    
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
@@ -104,7 +103,7 @@ export default {
   },
   data() {
     return {
-        zoom: 7,
+        zoom: 6,
         geojson: null,
         tileProviders: tileProviders,
         isButtonVisible: false,
@@ -283,12 +282,21 @@ export default {
 
 <style scoped>
 
+.custom-control-main {
+  color: #fff;
+  background: rgb(15, 14, 14);
+  padding: 0 1em;
+  border: 1px solid rgb(15, 14, 14);
+  border-radius: 3px;
+}
+
 .custom-control {
   color: #fff;
   background: rgb(15, 14, 14);
   padding: 0 1em;
   border: 1px solid rgb(15, 14, 14);
   border-radius: 3px;
+  opacity: 75%;
 }
 
 .leaflet-control {
@@ -301,6 +309,7 @@ export default {
   padding: 0 1em;
   padding: 10px;
   border-radius: 3px;
+  opacity: 75%;
 }
 
 .select-label {

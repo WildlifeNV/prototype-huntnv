@@ -1,6 +1,6 @@
 <template>
-    <Map class="map" id="map" style="height: 100%"/>
-    <SideBar class="side-bar" style="width:15%" />
+    <Map class="map" id="map" style="height: 100%, width:100%"/>
+    <!-- <SideBar class="side-bar" style="width:15%" /> -->
 </template>
 
 <script setup>

@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-        zoom: 6,
+        zoom: 7,
         geojson: null,
         tileProviders: tileProviders,
         isButtonVisible: false,
@@ -64,7 +64,7 @@ export default {
   },
   async beforeMount() {
     // HERE is where to load Leaflet components!
-    const baseURL = "/Game_Management_Units.geojson"
+    const baseURL = "/hunt-units.geojson"
     const response = await fetch( baseURL );
     this.geojson = await response.json();
   },
@@ -75,15 +75,17 @@ export default {
       } else {
         this.isButtonVisible = false
       }
-    },
-    
-
+    }
   },
   computed: {
     onEachFeature() {
       return (features, layer) => {
-        const huntUnitContent = "<p><b> HUNT UNIT: </b>"  + features.properties.HUNTUNIT + 
-                "</br>" + "<p><b> MANAGEMENT AREA: </b>" + features.properties.MANAGEUNIT;
+        const huntUnitContent = "<p><b> HUNT UNIT </b>" + "<b>" + features.properties.HUNTUNIT + "</b>" + 
+                "</br>" + "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT +
+                "</br>" + "<p>ACRES: " + features.properties.ACRES;
+
+        const closedUnitContent = "<p><b> STATUS: </b>" + features.properties.SYMBOL + 
+                "</br>" + "<p><b> NAME: </b>" + features.properties.CLOSED;
 
         layer.bindTooltip(huntUnitContent, {
           permanent: false,

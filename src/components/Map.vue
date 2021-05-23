@@ -114,10 +114,6 @@
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
-      color="#41b782"
-      :fill="true"
-      :fillOpacity="0.5"
-      fillColor="#41b782"
     />
   </l-map>
 </template>
@@ -353,12 +349,7 @@ export default {
           // allows filtering of geojson
           console.log(id)
           if (id === 0) {
-            const baseURL = "/hunt_unit_antelope.geojson"
-            axios.get(baseURL)
-              .then((response) => {
-                this.geojson = response.data.features
-              }
-            )
+              this.geojson = response.data.features
           } else {
             const managementunit = id
             const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)

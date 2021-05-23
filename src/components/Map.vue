@@ -18,6 +18,21 @@
       @click="showButton">
       <h1>HUNT NV</h1>
     </l-control>
+     <l-control 
+      :position="'bottomright'" 
+      v-if="isButtonVisible"
+      v-show="isWeaponVisible">
+      <div class="select">
+        <label class="select-label">SELECT A WEAPON CLASS</label>
+        <select id="weapon" @change='filterWeapon()' >
+          <option value="none">None</option>
+          <option value="archery" >ARCHERY</option>
+          <option value="muzzleLoader" >MUZZLE LOADER</option>
+          <option value="rifle" >RIFLE</option>
+          <option value="anyWeapone" >ANY LEGAL WEAPON</option>
+        </select>
+      </div>
+    </l-control>
     <l-control 
       :position="'bottomright'" 
       v-if="isButtonVisible">
@@ -143,6 +158,31 @@ export default {
         this.isButtonVisible = false
       }
     },
+    filterWeapon() {
+      const species_id = document.getElementById("species").value;
+      const weapon = document.getElementById("weapon").value;
+
+      var weapon_id
+
+      switch (weapon) {
+        case 'archery':
+          weapon_id = 1
+          break;
+        default:
+          break;
+      }
+      const baseURL = "/hunt_unit_antelope.geojson"
+      axios.get(baseURL)
+        .then((response) => {
+          const weapon = weapon_id
+          if (weapon === 1) {
+            const data = response.data.features.filter(features => ((features.properties.ARCHERY === weapon_id) && (features.properties.ANTELOPE === weapon_id)))
+            this.geojson = data
+
+          }
+        }
+      )
+    },
     filterSpecies() {
       const species = document.getElementById("species").value;
 
@@ -167,6 +207,7 @@ export default {
             const data = response.data.features.filter(features => features.properties.ANTELOPE === species_id)
             console.log(response.data.features.filter(features => features.properties.ANTELOPE === species_id))
             this.geojson = data
+            this.isWeaponVisible = true
           }
         }
       )

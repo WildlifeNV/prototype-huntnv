@@ -389,8 +389,10 @@ export default {
         const huntUnitContent = "<p><b> HUNT UNIT </b>" + "<b>" + features.properties.HUNTUNIT + "</b>" + 
                 "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT;
         
-        const huntUnitDetails = "<p><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></p>" + 
+        const huntUnitDetails = "<p><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></p>" +
+                "<a><b>Hunt Unit Details</b></a>" +
                 "<p>ACRES: " + features.properties.ACRES + "</p>" +
+                "<p>ACRES PUBLIC: " + (features.properties.ACRES*0.80) + " (" + (((features.properties.ACRES*0.80)/(features.properties.ACRES))*100) + "%)" + "</p>" +
                 "<p>ANTELOPE ARCHERY QUOTA: " + features.properties.QUOTA + "</p>" +
                 "<p>REASON FOR CLOSURE: " + features.properties.CLOSED + "</p>" +
                 "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";

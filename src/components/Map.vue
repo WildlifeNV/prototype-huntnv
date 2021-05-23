@@ -183,7 +183,7 @@ export default {
         }
       )
     },
-    filterSpecies() {
+    filterSpecies(species_id) {
       const species = document.getElementById("species").value;
 
       var species_id
@@ -208,6 +208,14 @@ export default {
             console.log(response.data.features.filter(features => features.properties.ANTELOPE === species_id))
             this.geojson = data
             this.isWeaponVisible = true
+          } else {
+            this.isWeaponVisible = false
+            const baseURL = "/hunt_unit_antelope.geojson"
+            axios.get(baseURL)
+              .then((response) => {
+                this.geojson = response.data.features
+              }
+            )
           }
         }
       )
@@ -358,8 +366,12 @@ export default {
     onEachFeature() {
       return (features, layer) => {
         const huntUnitContent = "<p><b> HUNT UNIT </b>" + "<b>" + features.properties.HUNTUNIT + "</b>" + 
-                "</br>" + "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT +
-                "</br>" + "<p>ACRES: " + features.properties.ACRES;
+                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT;
+        
+        const huntUnitDetails = "<p><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></p>" + 
+                "<p>ACRES: " + features.properties.ACRES + "</p>" +
+                "<p>REASON FOR CLOSURE: " + features.properties.CLOSED + "</p>" +
+                "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";
 
         const closedUnitContent = "<p><b> STATUS: </b>" + features.properties.SYMBOL + 
                 "</br>" + "<p><b> NAME: </b>" + features.properties.CLOSED;
@@ -367,7 +379,23 @@ export default {
         layer.bindTooltip(huntUnitContent, {
           permanent: false,
           sticky: true
-        })
+        });
+
+        layer.on('mouseover', function () {
+          this.setStyle({
+            'weight': '6px'
+          })
+        });
+
+        layer.on('mouseout', function () {
+          this.setStyle({
+            'weight': '3px'
+          })
+        });
+        layer.bindPopup(huntUnitDetails, {
+          permanent: false,
+          sticky: true
+        });
       }
     },
     options() {

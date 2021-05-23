@@ -24,7 +24,7 @@
       v-show="isQuotaVisible">
       <div class="select">
         <label class="select-label">SELECT A DESIRED QUOTA: <b>{{ quota }}</b></label>
-        <input type="range" max="100" min="1" step="1" v-model="quota">
+        <input type="range" max="100" min="1" step="1" v-model="quota" @change='filterQuota()' id="quota">
       </div>
     </l-control>
      <l-control 
@@ -168,7 +168,7 @@ export default {
         this.isButtonVisible = false
       }
     },
-    filterWeapon() {
+    filterWeapon(weapon_id) {
       const species_id = document.getElementById("species").value;
       const weapon = document.getElementById("weapon").value;
 
@@ -190,6 +190,17 @@ export default {
             this.geojson = data
             this.isQuotaVisible = true
           }
+        }
+      )
+    },
+    filterQuota() {
+      const quota = document.getElementById("quota").value;
+      const baseURL = "/hunt_unit_antelope.geojson"
+      axios.get(baseURL)
+        .then((response) => {
+          const data = response.data.features.filter(features => ((features.properties.ARCHERY === 1) && (features.properties.ANTELOPE === 1) && (features.properties.QUOTA < quota)))
+          this.geojson = data
+          this.isQuotaVisible = true
         }
       )
     },
@@ -380,6 +391,7 @@ export default {
         
         const huntUnitDetails = "<p><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></p>" + 
                 "<p>ACRES: " + features.properties.ACRES + "</p>" +
+                "<p>ANTELOPE ARCHERY QUOTA: " + features.properties.QUOTA + "</p>" +
                 "<p>REASON FOR CLOSURE: " + features.properties.CLOSED + "</p>" +
                 "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";
 

@@ -18,6 +18,15 @@
       @click="showButton">
       <h1>HUNT NV</h1>
     </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      v-if="isButtonVisible"
+      v-show="isQuotaVisible">
+      <div class="select">
+        <label class="select-label">SELECT A DESIRED QUOTA: <b>{{ quota }}</b></label>
+        <input type="range" max="100" min="1" step="1" v-model="quota">
+      </div>
+    </l-control>
      <l-control 
       :position="'bottomright'" 
       v-if="isButtonVisible"
@@ -135,10 +144,11 @@ export default {
   },
   data() {
     return {
-        zoom: 6,
+        zoom: 7,
         geojson: null,
         tileProviders: tileProviders,
         isButtonVisible: false,
+        quota: 50,
     };
   },
   async beforeMount() {
@@ -178,7 +188,7 @@ export default {
           if (weapon === 1) {
             const data = response.data.features.filter(features => ((features.properties.ARCHERY === weapon_id) && (features.properties.ANTELOPE === weapon_id)))
             this.geojson = data
-
+            this.isQuotaVisible = true
           }
         }
       )

@@ -114,6 +114,10 @@
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
+      color="#41b782"
+      :fill="true"
+      :fillOpacity="0.5"
+      fillColor="#41b782"
     />
   </l-map>
 </template>
@@ -231,6 +235,7 @@ export default {
             this.isWeaponVisible = true
           } else {
             this.isWeaponVisible = false
+            this.isQuotaVisible = false
             const baseURL = "/hunt_unit_antelope.geojson"
             axios.get(baseURL)
               .then((response) => {
@@ -407,13 +412,13 @@ export default {
 
         layer.on('mouseover', function () {
           this.setStyle({
-            'weight': '6px'
+            'weight': '6px',
           })
         });
 
         layer.on('mouseout', function () {
           this.setStyle({
-            'weight': '3px'
+            'weight': '3px',
           })
         });
         layer.bindPopup(huntUnitDetails, {

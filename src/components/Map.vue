@@ -12,6 +12,7 @@
       :attribution="tileProvider.attribution"
       layer-type="base"
     />
+    <MapLeftList :premium="premium" />
     <l-control 
       :position="'bottomright'" 
       class="custom-control-main"
@@ -126,6 +127,8 @@ import "leaflet/dist/leaflet.css"
 import { LMap, LGeoJson, LTileLayer, LControl} from "@vue-leaflet/vue-leaflet";
 import axios from "axios"
 
+import MapLeftList from "./MapLeftList.vue"
+
 const tileProviders = [
   {
     name: 'OpenStreetMap',
@@ -141,7 +144,8 @@ export default {
     LMap,
     LGeoJson,
     LTileLayer,
-    LControl
+    LControl,
+    MapLeftList
   },
   data() {
     return {
@@ -150,6 +154,7 @@ export default {
         tileProviders: tileProviders,
         isButtonVisible: false,
         quota: 50,
+        premium: true,
     };
   },
   async beforeMount() {
@@ -440,17 +445,34 @@ export default {
 
 .custom-control-main {
   color: #fff;
+  font-weight: bold;
   background: rgb(15, 14, 14);
   padding: 0 1em;
-  border: 1px solid rgb(15, 14, 14);
+  border-radius: 3px;
+}
+
+.custom-control-main:hover {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  background: rgb(179, 172, 172);
+  padding: 0 1em;
   border-radius: 3px;
 }
 
 .custom-control {
   color: #fff;
+  font-weight: bold;
   background: rgb(15, 14, 14);
   padding: 0 1em;
-  border: 1px solid rgb(15, 14, 14);
+  border-radius: 3px;
+  opacity: 75%;
+}
+
+.custom-control:hover {
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  background: rgb(179, 172, 172);
+  padding: 0 1em;
   border-radius: 3px;
   opacity: 75%;
 }

@@ -114,6 +114,7 @@
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
+      :options-style="styleFunction"
     />
   </l-map>
 </template>
@@ -153,7 +154,7 @@ export default {
   },
   async beforeMount() {
     // HERE is where to load Leaflet components!
-    const baseURL = "/hunt_unit_antelope.geojson"
+    const baseURL = "/hunt_unit_antelope.json"
     await axios.get(baseURL)
       .then((response) => {
         this.geojson = response.data.features
@@ -181,7 +182,7 @@ export default {
         default:
           break;
       }
-      const baseURL = "/hunt_unit_antelope.geojson"
+      const baseURL = "/hunt_unit_antelope.json"
       axios.get(baseURL)
         .then((response) => {
           const weapon = weapon_id
@@ -195,7 +196,7 @@ export default {
     },
     filterQuota() {
       const quota = document.getElementById("quota").value;
-      const baseURL = "/hunt_unit_antelope.geojson"
+      const baseURL = "/hunt_unit_antelope.json"
       axios.get(baseURL)
         .then((response) => {
           const data = response.data.features.filter(features => ((features.properties.ARCHERY === 1) && (features.properties.ANTELOPE === 1) && (features.properties.QUOTA < quota)))
@@ -220,19 +221,18 @@ export default {
         default:
           break;
       }
-      const baseURL = "/hunt_unit_antelope.geojson"
+      const baseURL = "/hunt_unit_antelope.json"
       axios.get(baseURL)
         .then((response) => {
           const species = species_id
           if (species === 1) {
             const data = response.data.features.filter(features => features.properties.ANTELOPE === species_id)
-            console.log(response.data.features.filter(features => features.properties.ANTELOPE === species_id))
             this.geojson = data
             this.isWeaponVisible = true
           } else {
             this.isWeaponVisible = false
             this.isQuotaVisible = false
-            const baseURL = "/hunt_unit_antelope.geojson"
+            const baseURL = "/hunt_unit_antelope.json"
             axios.get(baseURL)
               .then((response) => {
                 this.geojson = response.data.features
@@ -343,7 +343,7 @@ export default {
               id = none
       }
 
-      const baseURL = "/hunt_unit_antelope.geojson"
+      const baseURL = "/hunt_unit_antelope.json"
       axios.get(baseURL)
         .then((response) => {
           // allows filtering of geojson
@@ -360,7 +360,7 @@ export default {
       )
     },
     filterDefualt() {
-      const baseURL = "/hunt_unit_antelope.geojson"
+      const baseURL = "/hunt_unit_antelope.json"
       axios.get(baseURL)
         .then((response) => {
           this.geojson = response.data.features
@@ -368,7 +368,7 @@ export default {
       )
     },
     filterClosed() {
-      const baseURL = "/hunt_unit_antelope.geojson"
+      const baseURL = "/hunt_unit_antelope.json"
       axios.get(baseURL)
         .then((response) => {
           const managementunit = 0
@@ -380,17 +380,24 @@ export default {
     }
   },
   computed: {
+    styleFunction () {
+      return () => {
+        this.setStyle({
+          'weight': '1px',
+        })
+      };
+    },
     onEachFeature() {
       return (features, layer) => {
-        const huntUnitContent = "<p><b> HUNT UNIT </b>" + "<b>" + features.properties.HUNTUNIT + "</b>" + 
-                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT;
+        const huntUnitContent = "<p><b>UNIT: </b>" + "<b>" + features.properties.HUNTUNIT + "</b>";
         
-        const huntUnitDetails = "<p><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></p>" +
+        const huntUnitDetails = "<h1><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></h1>" +
                 "<a><b>Hunt Unit Details</b></a>" +
                 "<p>ACRES: " + features.properties.ACRES + "</p>" +
                 "<p>ACRES PUBLIC: " + (features.properties.ACRES*0.80) + " (" + (((features.properties.ACRES*0.80)/(features.properties.ACRES))*100) + "%)" + "</p>" +
                 "<p>ANTELOPE ARCHERY QUOTA: " + features.properties.QUOTA + "</p>" +
                 "<p>REASON FOR CLOSURE: " + features.properties.CLOSED + "</p>" +
+                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT +
                 "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";
 
         const closedUnitContent = "<p><b> STATUS: </b>" + features.properties.SYMBOL + 
@@ -404,12 +411,14 @@ export default {
         layer.on('mouseover', function () {
           this.setStyle({
             'weight': '6px',
+            'color': 'black',
           })
         });
 
         layer.on('mouseout', function () {
           this.setStyle({
             'weight': '3px',
+            'color': 'rgb(51, 136, 255)',
           })
         });
         layer.bindPopup(huntUnitDetails, {

@@ -1,10 +1,10 @@
 <template>
     <l-map 
       style="height: 93%; width: 100%"
-      v-model:zoom="zoom" 
+      v-model:zoom="zoom"
       :center="[38.6, -116.4194]">
     <TopoLayer />
-    <MapLeftList />
+    <!--<MapLeftList />-->
     <l-control 
       :position="'bottomright'" 
       class="custom-control-main"
@@ -418,17 +418,49 @@ export default {
                 "<p>ACRES: " + features.properties.ACRES + "</p>" +
                 "<p>ACRES PUBLIC: " + (features.properties.ACRES*0.80) + " (" + (((features.properties.ACRES*0.80)/(features.properties.ACRES))*100) + "%)" + "</p>" +
                 "<p>ANTELOPE ARCHERY QUOTA: " + features.properties.QUOTA + "</p>" +
-                "<p>REASON FOR CLOSURE: " + features.properties.CLOSED + "</p>" +
                 "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT +
                 "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";
 
-        const closedUnitContent = "<p><b> STATUS: </b>" + features.properties.SYMBOL + 
-                "</br>" + "<p><b> NAME: </b>" + features.properties.CLOSED;
+        const closedUnitContent ="<p><b> NAME: </b>" + features.properties.CLOSED + "<br>" + "<p><b> STATUS: </b>" + features.properties.SYMBOL;
 
-        layer.bindTooltip(huntUnitContent, {
-          permanent: false,
-          sticky: true
-        });
+        const countyContent ="<p><b> NAME: </b>" + features.properties.cntyname;
+
+        const regionContent ="<p><b> NAME: </b>" + features.properties.region;
+
+        const closedDetails = "<h1><b>" + features.properties.CLOSED + "</b></h1>" +
+                "<p>ACRES: " + features.properties.ACRES + "</p>" +
+                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT;
+
+        if (features.properties.HUNTUNIT === null) {
+          layer.bindTooltip(closedUnitContent, {
+            permanent: false,
+            sticky: true
+          });
+          layer.bindPopup(closedDetails, {
+            permanent: false,
+            sticky: true
+          });
+        }  else if (features.properties.HUNTUNIT != null) {
+          layer.bindTooltip(huntUnitContent, {
+            permanent: false,
+            sticky: true
+          });
+          layer.bindPopup(huntUnitDetails, {
+            permanent: false,
+            sticky: true
+          });
+        } else if (features.properties.cntyname != null) {
+          layer.bindTooltip(countyContent, {
+            permanent: false,
+            sticky: true
+          });
+        } else if (features.properties.region != null) {
+          layer.bindTooltip(regionContent, {
+            permanent: false,
+            sticky: true
+          });
+        }
+
         //make sure that weight is set to number or geojson will disappear
         layer.on('mouseover', function () {
           this.setStyle({
@@ -442,11 +474,6 @@ export default {
             'weight': '3',
             'color': 'rgb(51, 136, 255)',
           })
-        });
-
-        layer.bindPopup(huntUnitDetails, {
-          permanent: false,
-          sticky: true
         });
       }
     },

@@ -1,5 +1,10 @@
 <template>
-    <Map class="map" id="map" style="height: 100%, width:100%"/>
+    <div id="navbar">
+      <router-link to="/" class="navbar-link">Map</router-link>
+      <br>
+      <router-link to="/details" class="navbar-link">Details</router-link>
+    </div>
+    <router-view></router-view>
     <!-- <SideBar class="side-bar" style="width:15%" /> -->
 </template>
 
@@ -16,14 +21,26 @@ import SideBar from './components/SideBar.vue'
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #ffffff;
   height: 100vh;
   width: 100vw;
-  display: flex;
+  display: inherit;
+}
+
+.navbar-link {
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 10px;
 }
 
 body {
   background-color: black;
   margin: 0;
+}
+
+#navbar {
+  display: inline-flex;
 }
 </style>

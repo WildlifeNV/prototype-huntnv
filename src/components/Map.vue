@@ -1,6 +1,6 @@
 <template>
     <l-map 
-      style="height: 100%; width: 100%"
+      style="height: 93%; width: 100%"
       v-model:zoom="zoom" 
       :center="[38.6, -116.4194]">
     <l-tile-layer
@@ -12,7 +12,7 @@
       :attribution="tileProvider.attribution"
       layer-type="base"
     />
-    <MapLeftList :premium="premium" />
+    <MapLeftList />
     <l-control 
       :position="'bottomright'" 
       class="custom-control-main"
@@ -116,6 +116,7 @@
       :geojson="geojson" 
       :options="options"
       :options-style="styleFunction"
+      @click="details"
     />
   </l-map>
 </template>
@@ -131,11 +132,9 @@ import MapLeftList from "./MapLeftList.vue"
 
 const tileProviders = [
   {
-    name: 'OpenStreetMap',
-    visible: true,
-    attribution:
-      '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      name: 'Topo',
+      visible: true,
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
   },
 ];
 
@@ -149,7 +148,7 @@ export default {
   },
   data() {
     return {
-        zoom: 7,
+        zoom: 6,
         geojson: null,
         tileProviders: tileProviders,
         isButtonVisible: false,
@@ -167,6 +166,9 @@ export default {
     )
   },
   methods: {
+    details () {
+
+    },
     showButton() {
       if (this.isButtonVisible == false) {
         this.isButtonVisible = true
@@ -385,6 +387,7 @@ export default {
     }
   },
   computed: {
+  
     styleFunction () {
       return () => {
         this.setStyle({
@@ -426,6 +429,7 @@ export default {
             'color': 'rgb(51, 136, 255)',
           })
         });
+
         layer.bindPopup(huntUnitDetails, {
           permanent: false,
           sticky: true

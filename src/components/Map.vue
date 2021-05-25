@@ -401,14 +401,6 @@ export default {
     }
   },
   computed: {
-  
-    styleFunction () {
-      return () => {
-        this.setStyle({
-          'weight': '1px',
-        })
-      };
-    },
     onEachFeature() {
       return (features, layer) => {
         const huntUnitContent = "<p><b>UNIT: </b>" + "<b>" + features.properties.HUNTUNIT + "</b>";

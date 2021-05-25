@@ -403,6 +403,7 @@ export default {
   computed: {
     onEachFeature() {
       return (features, layer) => {
+          
         const huntUnitContent = "<p><b>UNIT: </b>" + "<b>" + features.properties.HUNTUNIT + "</b>";
         
         const huntUnitDetails = "<h1><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></h1>" +
@@ -418,22 +419,23 @@ export default {
 
         const regionContent ="<p><b> NAME: </b>" + features.properties.region;
 
-        const closedDetails = "<h1><b>" + features.properties.CLOSED + "</b></h1>" +
-                "<p>ACRES: " + features.properties.ACRES + "</p>";
-
         if (features.properties.HUNTUNIT === null) {
           layer.bindTooltip(closedUnitContent, {
             permanent: false,
             sticky: true
           });
+          layer.setStyle({
+            fillColor: 'red',
+          });
+
         }  else if (features.properties.HUNTUNIT != null) {
           layer.bindTooltip(huntUnitContent, {
             permanent: false,
             sticky: true
           });
+          
           layer.bindPopup(huntUnitDetails, {
-            permanent: false,
-            sticky: true
+            permanent: false
           });
         } else if (features.properties.cntyname != null) {
           layer.bindTooltip(countyContent, {
@@ -452,13 +454,16 @@ export default {
           this.setStyle({
             'weight': '6',
             'color': 'black',
-          })
+            fillOpacity: '0.5'
+          });
+          this.bringToFront()
         });
 
         layer.on('mouseout', function () {
           this.setStyle({
             'weight': '3',
             'color': 'rgb(51, 136, 255)',
+            fillOpacity: '0.2'
           })
         });
       }

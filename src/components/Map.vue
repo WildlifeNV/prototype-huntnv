@@ -4,7 +4,26 @@
       v-model:zoom="zoom"
       :center="[38.6, -116.4194]">
     <TopoLayer />
-    <!--<MapLeftList />-->
+    <MapLeftList />
+    <l-control 
+      :position="'bottomleft'" 
+      class="custom-control-list"
+      v-show="isListVisible">
+      <h1>UNIT LIST</h1>
+      <table class="custom-control-table">
+        <tr>
+          <th>Unit</th>
+          <th>Acres</th>
+        </tr>
+        <tr
+          v-for="(item, index) in geojson"
+          :key="index"
+        >
+          <td>{{ item.properties.HUNTUNIT }}</td>
+          <td>{{ item.properties.ACRES }}</td>
+        </tr>
+      </table>
+    </l-control>
     <l-control 
       :position="'bottomright'" 
       class="custom-control-main"
@@ -121,7 +140,6 @@
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
-      :options-style="styleFunction"
       @click="details"
     />
   </l-map>
@@ -150,6 +168,7 @@ export default {
         zoom: 6,
         geojson: null,
         isButtonVisible: false,
+        isListVisible: null,
         quota: 50,
         premium: true,
     };
@@ -234,6 +253,7 @@ export default {
             const data = response.data.features.filter(features => features.properties.ANTELOPE === species_id)
             this.geojson = data
             this.isWeaponVisible = true
+            this.isListVisible = true
           } else {
             this.isWeaponVisible = false
             this.isQuotaVisible = false
@@ -355,11 +375,13 @@ export default {
           console.log(id)
           if (id === 0) {
               this.geojson = response.data.features
+              this.isListVisible = false
           } else {
             const managementunit = id
             const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
             console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
             this.geojson = data
+            this.isListVisible = true
           }
         }
       )
@@ -529,6 +551,18 @@ export default {
 .select-label {
   color: #fff;
   padding-bottom: 10px;
+}
+
+.custom-control-list {
+    color: #fff;
+    background: rgb(15, 14, 14, 0.5);
+    padding:  5px 20px;
+    margin: 10px;
+    border-radius: 3px;
+}
+
+.custom-control-table {
+  padding: 10px;
 }
 
 </style>

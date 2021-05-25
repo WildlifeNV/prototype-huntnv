@@ -414,11 +414,10 @@ export default {
         const huntUnitContent = "<p><b>UNIT: </b>" + "<b>" + features.properties.HUNTUNIT + "</b>";
         
         const huntUnitDetails = "<h1><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></h1>" +
+                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT + "</p>" +
                 "<a><b>Hunt Unit Details</b></a>" +
                 "<p>ACRES: " + features.properties.ACRES + "</p>" +
                 "<p>ACRES PUBLIC: " + (features.properties.ACRES*0.80) + " (" + (((features.properties.ACRES*0.80)/(features.properties.ACRES))*100) + "%)" + "</p>" +
-                "<p>ANTELOPE ARCHERY QUOTA: " + features.properties.QUOTA + "</p>" +
-                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT +
                 "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";
 
         const closedUnitContent ="<p><b> NAME: </b>" + features.properties.CLOSED + "<br>" + "<p><b> STATUS: </b>" + features.properties.SYMBOL;
@@ -428,15 +427,10 @@ export default {
         const regionContent ="<p><b> NAME: </b>" + features.properties.region;
 
         const closedDetails = "<h1><b>" + features.properties.CLOSED + "</b></h1>" +
-                "<p>ACRES: " + features.properties.ACRES + "</p>" +
-                "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT;
+                "<p>ACRES: " + features.properties.ACRES + "</p>";
 
         if (features.properties.HUNTUNIT === null) {
           layer.bindTooltip(closedUnitContent, {
-            permanent: false,
-            sticky: true
-          });
-          layer.bindPopup(closedDetails, {
             permanent: false,
             sticky: true
           });

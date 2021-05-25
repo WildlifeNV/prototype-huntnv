@@ -3,15 +3,7 @@
       style="height: 93%; width: 100%"
       v-model:zoom="zoom" 
       :center="[38.6, -116.4194]">
-    <l-tile-layer
-      v-for="tileProvider in tileProviders"
-      :key="tileProvider.name"
-      :name="tileProvider.name"
-      :visible="tileProvider.visible"
-      :url="tileProvider.url"
-      :attribution="tileProvider.attribution"
-      layer-type="base"
-    />
+    <TopoLayer />
     <MapLeftList />
     <l-control 
       :position="'bottomright'" 
@@ -24,7 +16,7 @@
       v-if="isButtonVisible"
       v-show="isQuotaVisible">
       <div class="select">
-        <label class="select-label">SELECT A DESIRED QUOTA: <b>{{ quota }}</b></label>
+        <label class="select-label">DESIRED DRAW ODDS: <b>{{ quota }}%</b></label>
         <input type="range" max="100" min="1" step="1" v-model="quota" @change='filterQuota()' id="quota">
       </div>
     </l-control>
@@ -109,6 +101,20 @@
       :position="'bottomright'" 
       class="custom-control" 
       v-if="isButtonVisible"
+      @click="filterRegion">
+      <p>NDOW REGIONS</p>
+    </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      class="custom-control" 
+      v-if="isButtonVisible"
+      @click="filterCounty">
+      <p>NEVADA COUNTIES</p>
+    </l-control>
+    <l-control 
+      :position="'bottomright'" 
+      class="custom-control" 
+      v-if="isButtonVisible"
       @click="filterDefualt">
       <p>ALL UNITS</p>
     </l-control>
@@ -125,32 +131,24 @@
 // DON'T load Leaflet components here!
 // Its CSS is needed though, if not imported elsewhere in your application.
 import "leaflet/dist/leaflet.css"
-import { LMap, LGeoJson, LTileLayer, LControl} from "@vue-leaflet/vue-leaflet";
+import { LMap, LGeoJson, LControl} from "@vue-leaflet/vue-leaflet";
 import axios from "axios"
 
 import MapLeftList from "./MapLeftList.vue"
-
-const tileProviders = [
-  {
-      name: 'Topo',
-      visible: true,
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
-  },
-];
+import TopoLayer from "./layers/TopoLayer.vue"
 
 export default {
   components: {
     LMap,
     LGeoJson,
-    LTileLayer,
     LControl,
-    MapLeftList
+    MapLeftList,
+    TopoLayer
   },
   data() {
     return {
         zoom: 6,
         geojson: null,
-        tileProviders: tileProviders,
         isButtonVisible: false,
         quota: 50,
         premium: true,
@@ -382,6 +380,22 @@ export default {
           const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
           console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
           this.geojson = data
+        }
+      )
+    },
+    filterRegion() {
+      const baseURL = "https://pg-featureserv-g4n63.ondigitalocean.app/collections/boundaries.ndow_regions/items.json"
+      axios.get(baseURL)
+        .then((response) => {
+          this.geojson = response.data.features
+        }
+      )
+    },
+    filterCounty() {
+      const baseURL = "https://pg-featureserv-g4n63.ondigitalocean.app/collections/boundaries.nv_counties/items.json?limit=50"
+      axios.get(baseURL)
+        .then((response) => {
+          this.geojson = response.data.features
         }
       )
     }

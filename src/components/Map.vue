@@ -4,7 +4,13 @@
       v-model:zoom="zoom"
       :center="[38.6, -116.4194]">
     <TopoLayer />
-    <MapLeftList />
+    <!-- <MapLeftList /> -->
+    <l-control 
+      :position="'bottomleft'" 
+      class="custom-control-list">
+      <div id="info" v-if="isDetailsVisible">
+      </div>
+    </l-control>
     <l-control 
       :position="'bottomleft'" 
       class="custom-control-list"
@@ -13,14 +19,12 @@
       <table class="custom-control-table">
         <tr>
           <th>Unit</th>
-          <th>Acres</th>
           <th>Draw Odds</th>
         </tr>
         <tr
           v-for="(item, index) in geojson"
           :key="index">
           <td>{{ item.properties.HUNTUNIT }}</td>
-          <td>{{ item.properties.ACRES }}</td>
           <td>{{ item.properties.QUOTA }} %</td>
         </tr>
       </table>
@@ -142,7 +146,6 @@
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
-      @click="details"
     />
   </l-map>
 </template>
@@ -173,6 +176,7 @@ export default {
         isListVisible: false,
         isQuotaVisible: false,
         isWeaponVisible: false,
+        isDetailsVisible: true,
         quota: 50,
         premium: true,
     };
@@ -184,12 +188,10 @@ export default {
       .then((response) => {
         this.geojson = response.data.features
       }
-    )
+    );
   },
-  methods: {
-    details () {
 
-    },
+  methods: {
     showButton() {
       if (this.isButtonVisible == false) {
         this.isButtonVisible = true
@@ -198,7 +200,6 @@ export default {
       }
     },
     filterWeapon(weapon_id) {
-      const species_id = document.getElementById("species").value;
       const weapon = document.getElementById("weapon").value;
 
       var weapon_id
@@ -229,7 +230,7 @@ export default {
         .then((response) => {
           const data = response.data.features.filter(features => ((features.properties.ARCHERY === 1) && (features.properties.ANTELOPE === 1) && (features.properties.QUOTA < quota)))
           this.geojson = data
-          this.isQuotaVisible = true
+          this.isListVisible = true
         }
       )
     },
@@ -257,7 +258,6 @@ export default {
             const data = response.data.features.filter(features => features.properties.ANTELOPE === species_id)
             this.geojson = data
             this.isWeaponVisible = true
-            this.isListVisible = true
           } else {
             this.isWeaponVisible = false
             this.isQuotaVisible = false
@@ -430,11 +430,14 @@ export default {
         
         const huntUnitDetails = "<h1><b> HUNT UNIT " + features.properties.HUNTUNIT + "</b></h1>" +
                 "<p>MANAGEMENT AREA: " + features.properties.MANAGEUNIT + "</p>" +
-                "<a><b>Hunt Unit Details</b></a>" +
                 "<p>ACRES: " + features.properties.ACRES + "</p>" +
-                "<p>ACRES PUBLIC: " + (features.properties.ACRES*0.80) + " (" + (((features.properties.ACRES*0.80)/(features.properties.ACRES))*100) + "%)" + "</p>" +
-                "<p>DESCRIPTION: This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>";
-
+                "<p>ACRES PUBLIC: " + (features.properties.ACRES*0.80) + " (" + (((features.properties.ACRES*0.80)/(features.properties.ACRES))*100) + "%)" + "</p>";
+        
+        const huntUnitPlaceholder = "<h1><b>HUNT UNIT NA</b></h1>" +
+                "<p>MANAGEMENT AREA: None</p>" +
+                "<p>ACRES: NA</p>" +
+                "<p>ACRES PUBLIC:  NA</p>";
+              
         const closedUnitContent ="<p><b> NAME: </b>" + features.properties.CLOSED + "<br>" + "<p><b> STATUS: </b>" + features.properties.SYMBOL;
 
         const countyContent ="<p><b> NAME: </b>" + features.properties.county_name;
@@ -455,10 +458,6 @@ export default {
             permanent: false,
             sticky: true
           });
-          
-          layer.bindPopup(huntUnitDetails, {
-            permanent: false
-          });
         } else if (features.properties.county_name != null) {
           layer.bindTooltip(countyContent, {
             permanent: false,
@@ -478,7 +477,12 @@ export default {
             'color': 'black',
             fillOpacity: '0.5'
           });
-          this.bringToFront()
+          this.bringToFront();
+          if (features.properties.HUNTUNIT === null) {
+            document.getElementById("info").innerHTML = huntUnitPlaceholder;
+          } else {
+            document.getElementById("info").innerHTML = huntUnitDetails;
+          }
         });
 
         layer.on('mouseout', function () {
@@ -486,7 +490,11 @@ export default {
             'weight': '3',
             'color': 'rgb(51, 136, 255)',
             fillOpacity: '0.2'
-          })
+          });
+          document.getElementById("info").innerHTML = huntUnitPlaceholder;
+        });
+        layer.on('click', function () {
+          
         });
       }
     },

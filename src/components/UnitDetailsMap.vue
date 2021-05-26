@@ -8,7 +8,6 @@
     <l-geo-json 
       :geojson="geojson" 
       :options="options"
-      :options-style="styleFunction"
     />
   </l-map>
 </template>

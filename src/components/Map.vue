@@ -9,20 +9,22 @@
       :position="'bottomleft'" 
       class="custom-control-list"
       v-show="isListVisible">
-      <h1>UNIT LIST</h1>
+      <h2>UNIT LIST</h2>
       <table class="custom-control-table">
         <tr>
           <th>Unit</th>
           <th>Acres</th>
+          <th>Draw Odds</th>
         </tr>
         <tr
           v-for="(item, index) in geojson"
-          :key="index"
-        >
+          :key="index">
           <td>{{ item.properties.HUNTUNIT }}</td>
           <td>{{ item.properties.ACRES }}</td>
+          <td>{{ item.properties.QUOTA }} %</td>
         </tr>
       </table>
+      <!-- <button type="submit" class="custom-control-list-button">Create Hunt Report</button> -->
     </l-control>
     <l-control 
       :position="'bottomright'" 
@@ -168,7 +170,9 @@ export default {
         zoom: 6,
         geojson: null,
         isButtonVisible: false,
-        isListVisible: null,
+        isListVisible: false,
+        isQuotaVisible: false,
+        isWeaponVisible: false,
         quota: 50,
         premium: true,
     };
@@ -269,7 +273,6 @@ export default {
     },
     filterSelect() {
       const choice = document.getElementById("manageunit_id").value;
-      console.log(choice);
 
       var id;
 
@@ -372,14 +375,12 @@ export default {
       axios.get(baseURL)
         .then((response) => {
           // allows filtering of geojson
-          console.log(id)
           if (id === 0) {
               this.geojson = response.data.features
               this.isListVisible = false
           } else {
             const managementunit = id
             const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
-            console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
             this.geojson = data
             this.isListVisible = true
           }
@@ -400,7 +401,6 @@ export default {
         .then((response) => {
           const managementunit = 0
           const data = response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit)
-          console.log(response.data.features.filter(features => features.properties.MANAGEUNIT === managementunit))
           this.geojson = data
         }
       )
@@ -437,7 +437,7 @@ export default {
 
         const closedUnitContent ="<p><b> NAME: </b>" + features.properties.CLOSED + "<br>" + "<p><b> STATUS: </b>" + features.properties.SYMBOL;
 
-        const countyContent ="<p><b> NAME: </b>" + features.properties.cntyname;
+        const countyContent ="<p><b> NAME: </b>" + features.properties.county_name;
 
         const regionContent ="<p><b> NAME: </b>" + features.properties.region;
 
@@ -459,7 +459,7 @@ export default {
           layer.bindPopup(huntUnitDetails, {
             permanent: false
           });
-        } else if (features.properties.cntyname != null) {
+        } else if (features.properties.county_name != null) {
           layer.bindTooltip(countyContent, {
             permanent: false,
             sticky: true
@@ -563,6 +563,11 @@ export default {
 
 .custom-control-table {
   padding: 10px;
+}
+
+.custom-control-list-button {
+  padding: 10px;
+  margin: 10px;
 }
 
 </style>

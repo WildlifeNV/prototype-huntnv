@@ -16,7 +16,7 @@
                 <p><b>TRAIL ACCESS:</b> 12345 (10%) <button @click="showTrail">INFO</button></p>
                 <p v-show="isTrailVisible">All areas within 1 miles of defined trails</p>
                 <p><b>ROAD ACCESS:</b> 54321 (40%) <button @click="showRoad">INFO</button></p>
-                <p v-show="isRoadVisible">All areas within 1 miles of defined raods</p>
+                <p v-show="isRoadVisible">All areas within 2 miles of defined raods</p>
                 <p><b>DESCRIPTION:</b> This unit has lots of opportunities for camping and fishing around common hunting areas. This unit is slightly forested with large and deep valleys throughout.</p>
             </div>
         </div>

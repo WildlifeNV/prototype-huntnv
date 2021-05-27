@@ -56,16 +56,17 @@ export default {
           sticky: true
         });
 
+        // make sure that weight is a number value
         layer.on('mouseover', function () {
           this.setStyle({
-            'weight': '6px',
+            'weight': '6',
             'color': 'black',
           })
         });
 
         layer.on('mouseout', function () {
           this.setStyle({
-            'weight': '3px',
+            'weight': '3',
             'color': 'rgb(51, 136, 255)',
           })
         });
